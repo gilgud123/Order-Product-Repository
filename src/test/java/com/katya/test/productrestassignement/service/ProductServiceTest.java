@@ -11,14 +11,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Testcontainers
+@TestPropertySource(properties = {"spring.jpa.hibernate.ddl-auto=create-drop"})
 public class ProductServiceTest {
 
     @Container
@@ -50,6 +54,9 @@ public class ProductServiceTest {
         // given
         Product product = new Product();
         product.setName("Test Product");
+        product.setCategory("Test Category");
+        product.setPrice(BigDecimal.TEN);
+        product.setStockQuantity(100);
         productRepository.save(product);
 
         // when
@@ -65,10 +72,12 @@ public class ProductServiceTest {
         // given
         Product product = new Product();
         product.setName("Test Product");
-        Product savedProduct = productRepository.save(product);
+        product.setPrice(new BigDecimal("15.00"));
+        product.setStockQuantity(50);
+        productRepository.save(product);
 
         // when
-        ProductDTO result = productService.getProductById(savedProduct.getId());
+        ProductDTO result = productService.getProductById(product.getId());
 
         // then
         assertThat(result).isNotNull();
@@ -80,6 +89,10 @@ public class ProductServiceTest {
         // given
         ProductDTO productDTO = new ProductDTO();
         productDTO.setName("New Product");
+        productDTO.setDescription("Some description");
+        productDTO.setCategory("Some category");
+        productDTO.setPrice(new BigDecimal("99.99"));
+        productDTO.setStockQuantity(10);
 
         // when
         ProductDTO result = productService.createProduct(productDTO);
