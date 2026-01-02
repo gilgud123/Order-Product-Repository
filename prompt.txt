@@ -1,0 +1,20 @@
+create a following Spring Boot REST API:
+
+Build a REST API for managing users/orders/products with the following features:
+
+1. CRUD operations with:
+    * Validation
+    * Pagination & filtering
+    * Error handling
+
+2. Persist data using PostgreSQL.
+
+3. Write unit tests
+
+4. Provide a README
+
+Use following technologies:
+    * Java + Spring Boot
+    * JPA + Hibernate
+    * Maven
+    * JUnit 5 + Mockito

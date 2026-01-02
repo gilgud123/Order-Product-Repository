@@ -1,0 +1,112 @@
+# API Test Examples
+
+## Users API
+
+### Create User
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "email": "john.doe@example.com",
+  "firstName": "John",
+  "lastName": "Doe"
+}
+
+### Get All Users
+GET http://localhost:8080/api/users?page=0&size=10
+
+### Get User by ID
+GET http://localhost:8080/api/users/1
+
+### Search Users
+GET http://localhost:8080/api/users/search?query=john
+
+### Update User
+PUT http://localhost:8080/api/users/1
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "email": "john.doe@example.com",
+  "firstName": "John",
+  "lastName": "Smith"
+}
+
+### Delete User
+DELETE http://localhost:8080/api/users/1
+
+---
+
+## Products API
+
+### Create Product
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "Laptop",
+  "description": "High-performance laptop",
+  "price": 999.99,
+  "stockQuantity": 50,
+  "category": "Electronics"
+}
+
+### Get All Products
+GET http://localhost:8080/api/products?page=0&size=10
+
+### Get Product by ID
+GET http://localhost:8080/api/products/1
+
+### Search Products
+GET http://localhost:8080/api/products/search?query=laptop
+
+### Filter Products
+GET http://localhost:8080/api/products/filter?category=Electronics&minPrice=100&maxPrice=2000
+
+### Update Product
+PUT http://localhost:8080/api/products/1
+Content-Type: application/json
+
+{
+  "name": "Laptop Pro",
+  "description": "High-performance laptop with extended warranty",
+  "price": 1099.99,
+  "stockQuantity": 45,
+  "category": "Electronics"
+}
+
+### Delete Product
+DELETE http://localhost:8080/api/products/1
+
+---
+
+## Orders API
+
+### Create Order
+POST http://localhost:8080/api/orders
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "productIds": [1, 2, 3]
+}
+
+### Get All Orders
+GET http://localhost:8080/api/orders?page=0&size=10
+
+### Get Order by ID
+GET http://localhost:8080/api/orders/1
+
+### Get Orders by User
+GET http://localhost:8080/api/orders/user/1
+
+### Filter Orders
+GET http://localhost:8080/api/orders/filter?userId=1&status=PENDING
+
+### Update Order Status
+PATCH http://localhost:8080/api/orders/1/status?status=PROCESSING
+
+### Delete Order
+DELETE http://localhost:8080/api/orders/1
+
