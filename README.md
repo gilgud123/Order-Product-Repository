@@ -29,12 +29,14 @@ A comprehensive Spring Boot REST API for managing users, products, and orders wi
 
 ## Technology Stack
 
-- **Spring Boot 4.0.1**
+- **Spring Boot 3.2.1**
 - **Spring Data JPA** - Data persistence
 - **PostgreSQL** - Primary database
 - **Hibernate** - ORM
 - **Lombok** - Reduce boilerplate code
+- **MapStruct** - Entity-DTO mapping
 - **Jakarta Validation** - Input validation
+- **Testcontainers** - Integration testing with PostgreSQL
 - **Maven** - Dependency management
 
 ## Prerequisites
@@ -45,13 +47,19 @@ A comprehensive Spring Boot REST API for managing users, products, and orders wi
 
 ## Database Setup
 
-### Option 1: Using Docker Compose
+### Option 1: Using Docker Compose (Recommended)
 
-The project includes a `compose.yaml` file. Simply run:
+The project includes a `compose.yaml` file for PostgreSQL. Simply run:
 
 ```cmd
 docker-compose up -d
 ```
+
+This will start a PostgreSQL 15 container with the following configuration:
+- Database: `productdb`
+- Username: `postgres`
+- Password: `postgres`
+- Port: `5432`
 
 ### Option 2: Manual PostgreSQL Setup
 
@@ -63,6 +71,20 @@ docker-compose up -d
    spring.datasource.username=postgres
    spring.datasource.password=postgres
    ```
+
+### Database Initialization
+
+The project includes SQL scripts for automatic database setup:
+
+- **`schema.sql`** - Creates all database tables (users, products, orders, order_products)
+- **`data.sql`** - Populates the database with sample data
+
+These scripts run automatically when the application starts. To disable them, set:
+```properties
+spring.sql.init.mode=never
+```
+
+You can also manually run these scripts using your preferred PostgreSQL client.
 
 ## Running the Application
 
@@ -241,13 +263,19 @@ src/
 ?   ?   ??? dto/                 # Data Transfer Objects
 ?   ?   ??? entity/              # JPA entities
 ?   ?   ??? exception/           # Exception handling
-?   ?   ??? mapper/              # Entity-DTO mappers
+?   ?   ??? mapper/              # Entity-DTO mappers (MapStruct)
 ?   ?   ??? repository/          # Data repositories
 ?   ?   ??? service/             # Business logic
+?   ?   ??? config/              # Configuration classes
 ?   ??? resources/
 ?       ??? application.properties
+?       ??? schema.sql           # Database schema definition
+?       ??? data.sql             # Sample data initialization
 ??? test/
-    ??? java/                    # Test classes
+    ??? java/                    # Unit and integration tests
+        ??? controller/          # Controller tests
+        ??? repository/          # Repository integration tests
+        ??? service/             # Service integration tests
 ```
 
 ## Data Model
@@ -288,9 +316,28 @@ mvnw.cmd clean install
 ```
 
 ### Running Tests
+
+The project includes comprehensive unit and integration tests.
+
+#### Run All Tests
 ```cmd
 mvnw.cmd test
 ```
+
+#### Run Specific Test Class
+```cmd
+mvnw.cmd test -Dtest=ProductRepositoryTest
+```
+
+#### Integration Tests
+
+Integration tests use **Testcontainers** to spin up a real PostgreSQL database in a Docker container. This ensures tests run against an actual database rather than mocks or in-memory databases.
+
+Key integration test classes:
+- `ProductRepositoryTest` - Repository layer integration tests
+- `ProductServiceTest` - Service layer integration tests
+
+**Note:** Docker must be running for integration tests to execute successfully.
 
 ### Packaging
 ```cmd
@@ -308,15 +355,20 @@ Key configuration in `application.properties`:
 spring.datasource.url=jdbc:postgresql://localhost:5432/productdb
 spring.datasource.username=postgres
 spring.datasource.password=postgres
+spring.datasource.driver-class-name=org.postgresql.Driver
 
 # JPA/Hibernate
-spring.jpa.hibernate.ddl-auto=update
+spring.jpa.hibernate.ddl-auto=none
 spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.format_sql=true
 
 # Pagination
 spring.data.web.pageable.default-page-size=10
 spring.data.web.pageable.max-page-size=100
 ```
+
+**Note:** `spring.jpa.hibernate.ddl-auto=none` means the database schema is managed by the `schema.sql` script rather than Hibernate auto-generation. This provides better control over database structure.
 
 ## License
 
