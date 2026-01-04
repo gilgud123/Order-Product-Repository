@@ -1,5 +1,6 @@
 package com.katya.test.productrestassignement.service;
 
+import com.katya.test.productrestassignement.dto.CustomerRevenueDTO;
 import com.katya.test.productrestassignement.dto.OrderDTO;
 import com.katya.test.productrestassignement.entity.Order;
 import com.katya.test.productrestassignement.entity.Product;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -96,6 +98,25 @@ public class OrderService {
             throw new ResourceNotFoundException("Order", id);
         }
         orderRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CustomerRevenueDTO> getCustomerRevenuePerYear(Long customerId) {
+        // Verify user exists
+        if (!userRepository.existsById(customerId)) {
+            throw new ResourceNotFoundException("User", customerId);
+        }
+
+        List<Object[]> results = orderRepository.calculateCustomerRevenuePerYear(customerId);
+        List<CustomerRevenueDTO> revenueList = new ArrayList<>();
+
+        for (Object[] result : results) {
+            Integer year = (Integer) result[0];
+            BigDecimal totalRevenue = (BigDecimal) result[1];
+            revenueList.add(new CustomerRevenueDTO(customerId, year, totalRevenue));
+        }
+
+        return revenueList;
     }
 }
 

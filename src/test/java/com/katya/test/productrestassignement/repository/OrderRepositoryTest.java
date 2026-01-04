@@ -19,6 +19,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -403,6 +404,66 @@ public class OrderRepositoryTest {
         assertThat(savedOrder.getId()).isNotNull();
         assertThat(savedOrder.getProducts()).hasSize(2);
         assertThat(savedOrder.getTotalAmount()).isEqualByComparingTo(new BigDecimal("1029.98"));
+    }
+
+    @Test
+    public void whenCalculateCustomerRevenuePerYear_thenReturnCorrectRevenue() {
+        // given
+        User user = new User();
+        user.setUsername("testuser");
+        user.setEmail("test@example.com");
+        user.setFirstName("Test");
+        user.setLastName("User");
+        user = userRepository.save(user);
+
+        Product product = new Product();
+        product.setName("Laptop");
+        product.setDescription("Test product");
+        product.setPrice(new BigDecimal("999.99"));
+        product.setStockQuantity(100);
+        product.setCategory("Electronics");
+        product = productRepository.save(product);
+
+        // Create multiple orders for the same user
+        Order order1 = new Order();
+        order1.setUser(user);
+        order1.setProducts(new ArrayList<>());
+        order1.getProducts().add(product);
+        order1.setTotalAmount(new BigDecimal("999.99"));
+        order1.setStatus(Order.OrderStatus.PENDING);
+        orderRepository.save(order1);
+
+        Order order2 = new Order();
+        order2.setUser(user);
+        order2.setProducts(new ArrayList<>());
+        order2.getProducts().add(product);
+        order2.setTotalAmount(new BigDecimal("500.00"));
+        order2.setStatus(Order.OrderStatus.SHIPPED);
+        orderRepository.save(order2);
+
+        Order order3 = new Order();
+        order3.setUser(user);
+        order3.setProducts(new ArrayList<>());
+        order3.getProducts().add(product);
+        order3.setTotalAmount(new BigDecimal("250.00"));
+        order3.setStatus(Order.OrderStatus.DELIVERED);
+        orderRepository.save(order3);
+
+        // when
+        List<Object[]> results = orderRepository.calculateCustomerRevenuePerYear(user.getId());
+
+        // then
+        assertThat(results).isNotEmpty();
+        assertThat(results.size()).isGreaterThanOrEqualTo(1);
+
+        // Verify the first result contains year and total revenue
+        Object[] firstResult = results.get(0);
+        assertThat(firstResult).hasSize(2);
+        assertThat(firstResult[0]).isInstanceOf(Integer.class); // year
+        assertThat(firstResult[1]).isInstanceOf(BigDecimal.class); // totalRevenue
+
+        BigDecimal totalRevenue = (BigDecimal) firstResult[1];
+        assertThat(totalRevenue).isEqualByComparingTo(new BigDecimal("1749.99"));
     }
 }
 

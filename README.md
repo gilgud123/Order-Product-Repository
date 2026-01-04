@@ -98,6 +98,23 @@ You can also manually run these scripts using your preferred PostgreSQL client.
 
 The application will start on `http://localhost:8080`
 
+## API Documentation
+
+### Swagger/OpenAPI UI
+
+The API documentation is automatically generated using Springdoc OpenAPI and can be accessed via:
+
+- **Swagger UI (Interactive)**: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- **OpenAPI JSON**: [http://localhost:8080/api-docs](http://localhost:8080/api-docs)
+- **OpenAPI YAML**: [http://localhost:8080/api-docs.yaml](http://localhost:8080/api-docs.yaml)
+
+The Swagger UI provides:
+- Interactive API documentation
+- Ability to test endpoints directly from the browser
+- Request/response schemas
+- Endpoint descriptions and examples
+- Authentication testing (if configured)
+
 ## API Endpoints
 
 ### User Endpoints
@@ -152,6 +169,7 @@ The application will start on `http://localhost:8080`
 | GET | `/api/orders/{id}` | Get order by ID |
 | GET | `/api/orders/user/{userId}` | Get orders by user |
 | GET | `/api/orders/filter?userId={id}&status={status}` | Filter orders |
+| GET | `/api/orders/customer/{customerId}/revenue` | Get customer revenue per year |
 | POST | `/api/orders` | Create new order |
 | PATCH | `/api/orders/{id}/status?status={status}` | Update order status |
 | DELETE | `/api/orders/{id}` | Delete order |
@@ -170,6 +188,23 @@ The application will start on `http://localhost:8080`
 - `SHIPPED`
 - `DELIVERED`
 - `CANCELLED`
+
+#### Customer Revenue Response Example
+The `/api/orders/customer/{customerId}/revenue` endpoint returns total revenue per year:
+```json
+[
+  {
+    "customerId": 1,
+    "year": 2024,
+    "totalRevenue": 5000.00
+  },
+  {
+    "customerId": 1,
+    "year": 2025,
+    "totalRevenue": 3000.00
+  }
+]
+```
 
 ## Pagination Parameters
 

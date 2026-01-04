@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
@@ -23,5 +25,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             @Param("status") Order.OrderStatus status,
             Pageable pageable
     );
+
+    @Query("SELECT YEAR(o.createdAt) as year, SUM(o.totalAmount) as totalRevenue " +
+           "FROM Order o WHERE o.user.id = :customerId " +
+           "GROUP BY YEAR(o.createdAt) " +
+           "ORDER BY YEAR(o.createdAt)")
+    List<Object[]> calculateCustomerRevenuePerYear(@Param("customerId") Long customerId);
 }
 

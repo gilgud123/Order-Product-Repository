@@ -9,7 +9,7 @@ INSERT INTO products (name, description, price, stock_quantity, category) VALUES
 
 -- Populate orders
 -- Note: The user_id and product_ids might need to be adjusted if the IDs are not auto-incremented starting from 1
-INSERT INTO orders (user_id, total_amount, status) VALUES (1, 1029.98, 'PENDING');
+INSERT INTO orders (user_id, total_amount, status, created_at) VALUES (1, 1029.98, 'PENDING', '2026-01-04 00:00:00');
 
 -- Populate order_product join table
 INSERT INTO order_products (order_id, product_id) VALUES (1, 1);

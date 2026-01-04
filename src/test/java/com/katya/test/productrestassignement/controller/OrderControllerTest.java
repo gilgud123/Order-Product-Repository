@@ -1,6 +1,7 @@
 package com.katya.test.productrestassignement.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.katya.test.productrestassignement.dto.CustomerRevenueDTO;
 import com.katya.test.productrestassignement.dto.OrderDTO;
 import com.katya.test.productrestassignement.entity.Order;
 import com.katya.test.productrestassignement.service.OrderService;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -212,6 +214,29 @@ class OrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(orderDTO)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void getCustomerRevenue_ShouldReturnRevenueList() throws Exception {
+        // Given
+        CustomerRevenueDTO revenue2024 = new CustomerRevenueDTO(1L, 2024, new BigDecimal("5000.00"));
+        CustomerRevenueDTO revenue2025 = new CustomerRevenueDTO(1L, 2025, new BigDecimal("3000.00"));
+        List<CustomerRevenueDTO> revenueList = Arrays.asList(revenue2024, revenue2025);
+
+        when(orderService.getCustomerRevenuePerYear(1L)).thenReturn(revenueList);
+
+        // When & Then
+        mockMvc.perform(get("/api/orders/customer/1/revenue")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].customerId").value(1))
+                .andExpect(jsonPath("$[0].year").value(2024))
+                .andExpect(jsonPath("$[0].totalRevenue").value(5000.00))
+                .andExpect(jsonPath("$[1].customerId").value(1))
+                .andExpect(jsonPath("$[1].year").value(2025))
+                .andExpect(jsonPath("$[1].totalRevenue").value(3000.00));
     }
 }
 

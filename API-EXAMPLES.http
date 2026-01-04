@@ -110,3 +110,6 @@ PATCH http://localhost:8080/api/orders/1/status?status=PROCESSING
 ### Delete Order
 DELETE http://localhost:8080/api/orders/1
 
+### Get Customer Revenue Per Year
+GET http://localhost:8080/api/orders/customer/1/revenue
+

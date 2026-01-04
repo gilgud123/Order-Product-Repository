@@ -7,14 +7,35 @@ Build a REST API for managing users/orders/products with the following features:
     * Pagination & filtering
     * Error handling
 
+1.1 add an endpoint to get a total sum of all orders for a specific user base on user's ID.
+
 2. Persist data using PostgreSQL.
+* provide database schema (schema.sql) for creating necessary tables
+* provide data initialization script (data.sql) with sample data
+* provide docker compose file to run PostgreSQL
 
 3. Write unit tests
 
-4. Provide a README
+4. Write integration tests for all controllers, services, and repositories.
+
+5. Provide a README
+
+6. Dockerize the Spring Boot application
+
+7. Add Swagger/OpenAPI documentation for all endpoints.
 
 Use following technologies:
-    * Java + Spring Boot
-    * JPA + Hibernate
-    * Maven
-    * JUnit 5 + Mockito
+* Spring Boot 3.2.1
+* Spring Data JPA - Data persistence
+* PostgreSQL - Primary database
+* Hibernate - ORM
+* Lombok - Reduce boilerplate code
+* MapStruct - Entity-DTO mapping
+* Jakarta Validation - Input validation
+* Testcontainers - Integration testing with PostgreSQL
+* Maven - Dependency management
+
+Prerequisites:
+* Java 17 or higher
+* Maven 3.6+
+* PostgreSQL 12+ (or use Docker Compose)
