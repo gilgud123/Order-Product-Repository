@@ -31,12 +31,16 @@ A comprehensive Spring Boot REST API for managing users, products, and orders wi
 
 - **Spring Boot 3.2.1**
 - **Spring Data JPA** - Data persistence
+- **Spring Security** - Authentication and authorization
+- **OAuth2 Resource Server** - JWT token validation
+- **Keycloak** - Identity and Access Management
 - **PostgreSQL** - Primary database
 - **Hibernate** - ORM
 - **Lombok** - Reduce boilerplate code
 - **MapStruct** - Entity-DTO mapping
 - **Jakarta Validation** - Input validation
 - **Testcontainers** - Integration testing with PostgreSQL
+- **Springdoc OpenAPI** - API documentation
 - **Maven** - Dependency management
 
 ## Prerequisites
@@ -49,17 +53,27 @@ A comprehensive Spring Boot REST API for managing users, products, and orders wi
 
 ### Option 1: Using Docker Compose (Recommended)
 
-The project includes a `compose.yaml` file for PostgreSQL. Simply run:
+The project includes a `compose.yaml` file for PostgreSQL and Keycloak. Simply run:
 
 ```cmd
 docker-compose up -d
 ```
 
-This will start a PostgreSQL 15 container with the following configuration:
+This will start:
+- **PostgreSQL 15** on port 5432 (application database)
+- **Keycloak 23.0.0** on port 8180 (IAM server)
+
+Database configuration:
 - Database: `productdb`
 - Username: `postgres`
 - Password: `postgres`
 - Port: `5432`
+
+Keycloak configuration:
+- Admin Console: `http://localhost:8180`
+- Admin Username: `admin`
+- Admin Password: `admin`
+- Port: `8180`
 
 ### Option 2: Manual PostgreSQL Setup
 
@@ -85,6 +99,62 @@ spring.sql.init.mode=never
 ```
 
 You can also manually run these scripts using your preferred PostgreSQL client.
+
+## Security and Authentication
+
+### Keycloak OAuth2 Setup
+
+The application is secured with Keycloak using OAuth2/OpenID Connect. Follow these steps:
+
+#### 1. Start Keycloak
+```cmd
+docker-compose up -d keycloak
+```
+
+#### 2. Access Admin Console
+- URL: `http://localhost:8180`
+- Username: `admin`
+- Password: `admin`
+
+#### 3. Configure Keycloak
+
+**Create Realm:**
+- Realm name: `product-rest-api`
+
+**Create Roles:**
+- `USER` - Can view all resources, create orders
+- `ADMIN` - Full access to all operations
+
+**Create Client:**
+- Client ID: `product-rest-client`
+- Valid redirect URIs: `http://localhost:8080/*`
+
+**Create Users:**
+- Admin user: `admin-user` / `admin123` (roles: USER, ADMIN)
+- Regular user: `regular-user` / `user123` (role: USER)
+
+? **Detailed Setup Guide:** See [KEYCLOAK-SETUP.md](KEYCLOAK-SETUP.md)
+
+### Authentication in Swagger UI
+
+1. Start the application
+2. Open Swagger UI: `http://localhost:8080/swagger-ui.html`
+3. Click **"Authorize"** button
+4. Login with Keycloak credentials
+5. Test secured endpoints
+
+### Role-Based Access Control
+
+| Endpoint | GET | POST | PUT/PATCH | DELETE |
+|----------|-----|------|-----------|--------|
+| `/api/products/**` | USER, ADMIN | ADMIN | ADMIN | ADMIN |
+| `/api/users/**` | USER, ADMIN | ADMIN | ADMIN | ADMIN |
+| `/api/orders/**` | USER, ADMIN | USER, ADMIN | ADMIN | ADMIN |
+
+**Public Endpoints (No Authentication):**
+- `/swagger-ui/**`
+- `/api-docs/**`
+- `/actuator/**`
 
 ## Running the Application
 
