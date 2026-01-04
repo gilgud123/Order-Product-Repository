@@ -41,6 +41,8 @@ This starts:
 - PostgreSQL on port 5432 (application database)
 - Keycloak on port 8180 (IAM server)
 
+**Note:** Keycloak will use its built-in H2 database in development mode (`start-dev`). This is perfect for development and testing. For production, you should configure Keycloak to use an external database.
+
 ### 2. Access Keycloak Admin Console
 
 Open browser to: `http://localhost:8180`
@@ -48,6 +50,8 @@ Open browser to: `http://localhost:8180`
 **Admin Credentials:**
 - Username: `admin`
 - Password: `admin`
+
+**Important:** Wait about 30-60 seconds after starting for Keycloak to fully initialize before accessing the admin console.
 
 ## Keycloak Configuration
 
@@ -326,6 +330,60 @@ docker-compose logs keycloak
 **Solution**:
 - Verify `spring.security.oauth2.resourceserver.jwt.issuer-uri` matches Keycloak realm
 - Check Keycloak is accessible from application
+
+### Issue: Keycloak Docker container fails to start
+
+**Error:** `Cannot invoke "io.smallrye.config.ConfigValue.withConfigSourceName(String)"`
+
+**Cause**: Incorrect Keycloak configuration or database connection issues
+
+**Solution**:
+1. Stop all containers:
+   ```bash
+   docker-compose down -v
+   ```
+
+2. Remove old images:
+   ```bash
+   docker rmi quay.io/keycloak/keycloak:23.0.0
+   ```
+
+3. Start fresh:
+   ```bash
+   docker-compose up -d
+   ```
+
+4. Check logs:
+   ```bash
+   docker-compose logs -f keycloak
+   ```
+
+**Note:** The simplified configuration uses Keycloak's built-in H2 database in development mode, which avoids PostgreSQL configuration issues.
+
+### Issue: Keycloak admin console not accessible
+
+**Cause**: Keycloak still initializing
+
+**Solution**:
+- Wait 30-60 seconds after starting
+- Check container status: `docker ps`
+- Check logs: `docker-compose logs keycloak`
+- Verify port 8180 is not in use: `netstat -an | find "8180"`
+
+### Issue: Port 8180 already in use
+
+**Solution**:
+```bash
+# Find process using port 8180
+netstat -ano | findstr :8180
+
+# Kill the process (replace PID with actual process ID)
+taskkill /PID <PID> /F
+
+# Or change Keycloak port in compose.yaml
+ports:
+  - "8181:8080"  # Changed from 8180
+```
 
 ## Production Considerations
 

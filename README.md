@@ -74,6 +74,9 @@ Keycloak configuration:
 - Admin Username: `admin`
 - Admin Password: `admin`
 - Port: `8180`
+- Database: H2 (embedded, development mode)
+
+**Note:** Keycloak runs in development mode (`start-dev`) using an embedded H2 database. This is perfect for development and testing. Wait 30-60 seconds after starting for Keycloak to fully initialize.
 
 ### Option 2: Manual PostgreSQL Setup
 
