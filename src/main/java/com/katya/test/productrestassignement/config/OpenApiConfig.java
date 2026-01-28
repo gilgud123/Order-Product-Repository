@@ -25,8 +25,8 @@ public class OpenApiConfig {
         devServer.setDescription("Development Server");
 
         Contact contact = new Contact();
-        contact.setName("Product REST API Team");
-        contact.setEmail("support@example.com");
+        contact.setName("Order/Product REST API Tech Team");
+        contact.setEmail("support@oprep.com");
 
         License license = new License()
                 .name("Apache 2.0")
@@ -45,11 +45,11 @@ public class OpenApiConfig {
                 .description("Keycloak OAuth2 Authentication")
                 .flows(new OAuthFlows()
                         .authorizationCode(new OAuthFlow()
-                                .authorizationUrl("http://localhost:8180/realms/product-rest-api/protocol/openid-connect/auth")
-                                .tokenUrl("http://localhost:8180/realms/product-rest-api/protocol/openid-connect/token")
+                                .authorizationUrl("http://localhost:8081/realms/product-rest-api/protocol/openid-connect/auth")
+                                .tokenUrl("http://localhost:8081/realms/product-rest-api/protocol/openid-connect/token")
                         )
                         .password(new OAuthFlow()
-                                .tokenUrl("http://localhost:8180/realms/product-rest-api/protocol/openid-connect/token")
+                                .tokenUrl("http://localhost:8081/realms/product-rest-api/protocol/openid-connect/token")
                         )
                 );
 

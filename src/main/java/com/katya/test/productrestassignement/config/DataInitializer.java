@@ -18,6 +18,7 @@ import java.util.Arrays;
 /**
  * Data initialization for development/testing purposes
  * Activate with spring.profiles.active=dev
+ * this is a backup scenario, we are currently seeding the database through SQL scripts (schema, data)
  */
 @Configuration
 @RequiredArgsConstructor

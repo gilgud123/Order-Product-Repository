@@ -61,7 +61,7 @@ docker-compose up -d
 
 This will start:
 - **PostgreSQL 15** on port 5432 (application database)
-- **Keycloak 23.0.0** on port 8180 (IAM server)
+- **Keycloak 23.0.0** on port 8081 (IAM server)
 
 Database configuration:
 - Database: `productdb`
@@ -70,10 +70,10 @@ Database configuration:
 - Port: `5432`
 
 Keycloak configuration:
-- Admin Console: `http://localhost:8180`
+- Admin Console: `http://localhost:8081`
 - Admin Username: `admin`
 - Admin Password: `admin`
-- Port: `8180`
+- Port: `8081`
 - Database: H2 (embedded, development mode)
 
 **Note:** Keycloak runs in development mode (`start-dev`) using an embedded H2 database. This is perfect for development and testing. Wait 30-60 seconds after starting for Keycloak to fully initialize.
@@ -115,7 +115,7 @@ docker-compose up -d keycloak
 ```
 
 #### 2. Access Admin Console
-- URL: `http://localhost:8180`
+- URL: `http://localhost:8081`
 - Username: `admin`
 - Password: `admin`
 

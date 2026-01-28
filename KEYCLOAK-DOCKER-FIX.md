@@ -35,7 +35,7 @@ keycloak:
   command:
     - start-dev
   ports:
-    - "8180:8080"
+    - "8081:8080"
   depends_on:
     postgres:
       condition: service_healthy
@@ -52,7 +52,7 @@ keycloak:
   command:
     - start-dev
   ports:
-    - "8180:8080"
+    - "8081:8080"
   depends_on:
     postgres:
       condition: service_healthy
@@ -142,7 +142,7 @@ Listening on: http://0.0.0.0:8080
 ### 6. Access Admin Console
 Wait 30-60 seconds after startup, then open:
 ```
-http://localhost:8180
+http://localhost:8081
 ```
 
 Login with:
@@ -173,11 +173,11 @@ Login with:
 ### Issue: Container starts but admin console not accessible
 **Solution:** Wait longer (up to 60 seconds) for Keycloak to fully initialize.
 
-### Issue: Port 8180 already in use
+### Issue: Port 8081 already in use
 **Solution:** 
 ```bash
-# Find and kill process using port 8180
-netstat -ano | findstr :8180
+# Find and kill process using port 8081
+netstat -ano | findstr :8081
 taskkill /PID <PID> /F
 
 # Or change port in compose.yaml
@@ -267,7 +267,7 @@ When ready for production:
 
 ? **Solution:** Simplified to use built-in H2 database in development mode
 
-? **Result:** Keycloak starts successfully and is accessible at http://localhost:8180
+? **Result:** Keycloak starts successfully and is accessible at http://localhost:8081
 
 ? **Trade-off:** Using H2 (fine for development) instead of PostgreSQL (needed for production)
 

@@ -47,7 +47,7 @@ echo   - Username: postgres
 echo   - Password: postgres
 echo.
 echo Keycloak Admin Console:
-echo   - URL: http://localhost:8180
+echo   - URL: http://localhost:8081
 echo   - Username: admin
 echo   - Password: admin
 echo   - Note: Wait 30-60 seconds for Keycloak to fully initialize
@@ -57,7 +57,7 @@ echo Next Steps:
 echo ======================================
 echo.
 echo 1. Configure Keycloak:
-echo    - Open http://localhost:8180
+echo    - Open http://localhost:8081
 echo    - Login with admin/admin
 echo    - Create realm: product-rest-api
 echo    - Create roles: USER, ADMIN

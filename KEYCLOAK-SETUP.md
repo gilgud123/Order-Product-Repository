@@ -39,13 +39,13 @@ docker-compose up -d
 
 This starts:
 - PostgreSQL on port 5432 (application database)
-- Keycloak on port 8180 (IAM server)
+- Keycloak on port 8081 (IAM server)
 
 **Note:** Keycloak will use its built-in H2 database in development mode (`start-dev`). This is perfect for development and testing. For production, you should configure Keycloak to use an external database.
 
 ### 2. Access Keycloak Admin Console
 
-Open browser to: `http://localhost:8180`
+Open browser to: `http://localhost:8081`
 
 **Admin Credentials:**
 - Username: `admin`
@@ -144,11 +144,11 @@ Open browser to: `http://localhost:8180`
 
 ```properties
 # Keycloak OAuth2 Resource Server Configuration
-spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8180/realms/product-rest-api
-spring.security.oauth2.resourceserver.jwt.jwk-set-uri=http://localhost:8180/realms/product-rest-api/protocol/openid-connect/certs
+spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8081/realms/product-rest-api
+spring.security.oauth2.resourceserver.jwt.jwk-set-uri=http://localhost:8081/realms/product-rest-api/protocol/openid-connect/certs
 
 # Keycloak Client Configuration (for reference)
-keycloak.auth-server-url=http://localhost:8180
+keycloak.auth-server-url=http://localhost:8081
 keycloak.realm=product-rest-api
 keycloak.resource=product-rest-client
 ```
@@ -216,7 +216,7 @@ Now you can test endpoints with proper authentication:
 ### Get Access Token
 
 ```bash
-curl -X POST "http://localhost:8180/realms/product-rest-api/protocol/openid-connect/token" \
+curl -X POST "http://localhost:8081/realms/product-rest-api/protocol/openid-connect/token" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "client_id=product-rest-client" \
   -d "username=admin-user" \
@@ -255,7 +255,7 @@ curl -X GET "http://localhost:8080/api/products" \
 2. Type: **OAuth 2.0**
 3. Configure:
    - **Grant Type**: `Password Credentials`
-   - **Access Token URL**: `http://localhost:8180/realms/product-rest-api/protocol/openid-connect/token`
+   - **Access Token URL**: `http://localhost:8081/realms/product-rest-api/protocol/openid-connect/token`
    - **Client ID**: `product-rest-client`
    - **Username**: `admin-user`
    - **Password**: `admin123`
@@ -276,7 +276,7 @@ JWT tokens contain:
   "exp": 1704441234,
   "iat": 1704440934,
   "jti": "abc-123-def",
-  "iss": "http://localhost:8180/realms/product-rest-api",
+  "iss": "http://localhost:8081/realms/product-rest-api",
   "sub": "user-uuid",
   "typ": "Bearer",
   "azp": "product-rest-client",
@@ -368,21 +368,21 @@ docker-compose logs keycloak
 - Wait 30-60 seconds after starting
 - Check container status: `docker ps`
 - Check logs: `docker-compose logs keycloak`
-- Verify port 8180 is not in use: `netstat -an | find "8180"`
+- Verify port 8081 is not in use: `netstat -an | find "8081"`
 
-### Issue: Port 8180 already in use
+### Issue: Port 8081 already in use
 
 **Solution**:
 ```bash
-# Find process using port 8180
-netstat -ano | findstr :8180
+# Find process using port 8081
+netstat -ano | findstr :8081
 
 # Kill the process (replace PID with actual process ID)
 taskkill /PID <PID> /F
 
 # Or change Keycloak port in compose.yaml
 ports:
-  - "8181:8080"  # Changed from 8180
+  - "8181:8080"  # Changed from 8081
 ```
 
 ## Production Considerations
@@ -413,7 +413,7 @@ Use Spring profiles for different environments:
 
 **application-dev.properties**
 ```properties
-spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8180/realms/product-rest-api
+spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8081/realms/product-rest-api
 ```
 
 **application-prod.properties**
