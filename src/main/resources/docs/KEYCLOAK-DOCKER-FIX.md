@@ -180,7 +180,7 @@ Login with:
 netstat -ano | findstr :8081
 taskkill /PID <PID> /F
 
-# Or change port in compose.yaml
+# Or change port in docker-compose.yaml
 ```
 
 ### Issue: Container keeps restarting

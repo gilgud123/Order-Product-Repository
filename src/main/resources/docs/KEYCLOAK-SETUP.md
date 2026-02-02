@@ -380,7 +380,7 @@ netstat -ano | findstr :8081
 # Kill the process (replace PID with actual process ID)
 taskkill /PID <PID> /F
 
-# Or change Keycloak port in compose.yaml
+# Or change Keycloak port in docker-compose.yaml
 ports:
   - "8181:8080"  # Changed from 8081
 ```

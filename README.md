@@ -136,7 +136,7 @@ docker-compose up -d keycloak
 - Admin user: `admin-user` / `admin123` (roles: USER, ADMIN)
 - Regular user: `regular-user` / `user123` (role: USER)
 
-? **Detailed Setup Guide:** See [KEYCLOAK-SETUP.md](KEYCLOAK-SETUP.md)
+? **Detailed Setup Guide:** See [KEYCLOAK-SETUP.md](src/main/resources/docs/KEYCLOAK-SETUP.md)
 
 ### Authentication in Swagger UI
 
