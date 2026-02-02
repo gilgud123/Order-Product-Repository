@@ -1,0 +1,5 @@
+add profiles (e.g. unit and integration tests)
+create and add a postman collection
+add a CI/CD pipeline (e.g. GitHub Actions)
+add a batch job importing products from a .csv file
+configure cache
