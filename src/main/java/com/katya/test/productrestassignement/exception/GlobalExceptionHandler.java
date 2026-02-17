@@ -61,9 +61,9 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 "Bad Request",
                 "Validation failed",
-                request.getRequestURI()
+                request.getRequestURI(),
+                validationErrors
         );
-        errorResponse.setValidationErrors(validationErrors);
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }

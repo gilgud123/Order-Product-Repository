@@ -334,9 +334,9 @@ public class OrderServiceTest {
         assertThat(result.size()).isGreaterThanOrEqualTo(1);
 
         CustomerRevenueDTO firstRevenue = result.get(0);
-        assertThat(firstRevenue.getCustomerId()).isEqualTo(user.getId());
-        assertThat(firstRevenue.getYear()).isNotNull();
-        assertThat(firstRevenue.getTotalRevenue()).isEqualByComparingTo(new BigDecimal("1750.00"));
+        assertThat(firstRevenue.customerId()).isEqualTo(user.getId());
+        assertThat(firstRevenue.year()).isNotNull();
+        assertThat(firstRevenue.totalRevenue()).isEqualByComparingTo(new BigDecimal("1750.00"));
     }
 }
 
